@@ -27,6 +27,15 @@ const User = mongoose.model("User", UserSchema);
 
 // ==== CRUD Routes ====
 
+const ProductSchema = new mongoose.Schema({
+  name: String,
+  brand: String,
+  type: String,   // Electric, Acoustic, Bass, Drums, Effects
+  price: Number,
+  stock: Number
+});
+const Product = mongoose.model("Product", ProductSchema);
+
 //CREATE 
 app.post("/api/users", async (req, res) => {
     const {name, email} = req.body;

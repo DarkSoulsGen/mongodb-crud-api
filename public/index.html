@@ -27,7 +27,7 @@
             <!-- Data Table -->
             <div class="mt-5">
                 <h4>Stored Records</h4>
-                <table class="table table-boarded table-striped">
+                <table id="userTable" class="table table-boarded table-striped">
                     <thead class="table-dark">
                         <tr><th>Name</th><th>Email</th><th>Actions</th></tr>
                     </thead>
@@ -35,7 +35,7 @@
             </div>
         </div>
         <script>
-            const API_URL = "http://localhost:5000/api/user";
+            const API_URL = "https://mongodb-crud-api-azs9.onrender.com/api/users";
 
             async function loadUsers(){
                 const res = await fetch(API_URL);
@@ -96,7 +96,7 @@
                 document.getElementById("userForm").reset();
                 document.getElementById("userId").value = "";
                 document.getElementById("saveBtn").textContent = "Add User";
-                document.getElementById("cancelBtn").classList.add(d-none);
+                document.getElementById("cancelBtn").classList.add("d-none");
             }
 
             document.getElementById("cancelBtn").addEventListener("click", resetForm);
