@@ -12,7 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB Connection
-mongoose.connect('mongodb+srv://tadakuni761:Knave21@school.osancrw.mongodb.net/?appName=School', {
+mongoose.connect('mongodb+srv://tadakuni761:Knave21@school.osancrw.mongodb.net/GuitarStore?appName=School', {
     // The options are deprecated, so we can remove them
 })
 .then(() => console.log('✅ MongoDB connected successfully!'))
