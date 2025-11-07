@@ -1,115 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width, initial-scale=1.0">
-        <title>MongoDB + Node.js CRUD with Bootstrap</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body class="bg-light">
-        <div class="container mt-5">
-            <h2 class="text-center mb-4">MongoDB CRUD App (Bootstrap Frontend)</h2> 
-<!--Form-->
-           <form id="userForm" class="card p-4 shadow">
-            <input type="hidden" id="userId">
-            <div class="mb-3">
-                <label for="name" class="form-label">Name:</label>
-                <input type="text" id="name" class="form-control" required>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guitar Haven 🎸</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Guitar Haven</a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <section class="bg-primary text-white text-center p-5">
+    <h1>🔥 Guitar Sale Extravaganza!</h1>
+    <p>Up to 40% off on all electric, bass, and acoustic guitars.</p>
+    <a href="#products" class="btn btn-warning">Shop Now</a>
+  </section>
+
+  <!-- Product Grid -->
+  <div class="container my-5">
+    <h2 class="text-center mb-4" id="products">Featured Guitars</h2>
+    <div id="productList" class="row g-4"></div>
+  </div>
+
+  <script>
+    const API_URL = "https://mongodb-crud-api-azs9.onrender.com/api/products";
+
+    async function loadProducts() {
+      const res = await fetch(API_URL);
+      const products = await res.json();
+      const list = document.getElementById("productList");
+      list.innerHTML = "";
+
+      products.forEach(p => {
+        list.innerHTML += `
+          <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+              <img src="https://source.unsplash.com/300x200/?${p.type},guitar" class="card-img-top" alt="${p.name}">
+              <div class="card-body text-center">
+                <h5 class="card-title">${p.name}</h5>
+                <p class="text-muted">${p.brand}</p>
+                <p class="fw-bold">₱${p.price}</p>
+                <button class="btn btn-primary btn-sm">Add to Cart</button>
+              </div>
             </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <input type="email" id="email" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary" id="saveBtn">Add User</button>
-            <button type="button" class="btn btn-secondary d-none" id="cancelBtn">Cancel Edit</button>    
-            </form> 
-            
-            <!-- Data Table -->
-            <div class="mt-5">
-                <h4>Stored Records</h4>
-                <table id="userTable" class="table table-boarded table-striped">
-                    <thead class="table-dark">
-                        <tr><th>Name</th><th>Email</th><th>Actions</th></tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-        <script>
-            const API_URL = "https://mongodb-crud-api-azs9.onrender.com/api/users";
+          </div>
+        `;
+      });
+    }
 
-            async function loadUsers(){
-                const res = await fetch(API_URL);
-                const users = await res.json();
+    loadProducts();
+  </script>
 
-                const table = document.getElementById("userTable");
-                table.innerHTML = "";
-                users.forEach(user => {
-                    table.innerHTML +=  `
-                    <tr>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td>
-                            <button class="btn btn-warning btn-sm" onclick="editUser('${user._id}', '${user.name}', '${user.email}')">Edit</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteUser('${user._id}')">Delete</button>
-                            </td>
-                    </tr>
-                    `;
-                });
-            }
-            document.getElementById("userForm").addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const id = document.getElementById("userId").value;
-                const name = document.getElementById("name").value;
-                const email = document.getElementById("email").value;
-
-                if (id){
-                    //Update
-                    await fetch(`${API_URL}/${id}`, {
-                        method: "PUT",
-                        headers: { "Content-Type": "application/json"},
-                        body: JSON.stringify({ name, email})
-                    });
-                    alert("User updated!");   
-                } else {
-                    // Create
-                    await fetch(API_URL, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json"},
-                        body: JSON.stringify({ name, email})
-                });
-                alert("User added!");
-                }
-
-                resetForm();
-                loadUsers();
-            });
-
-            function editUser(id, name, email) {
-                document.getElementById("userId").value = id;
-                document.getElementById("name").value = name;
-                document.getElementById("email").value = email;
-                document.getElementById("saveBtn").textContent = "Update User";
-                document.getElementById("cancelBtn").classList.remove("d-none");
-            }
-
-            function resetForm() {
-                document.getElementById("userForm").reset();
-                document.getElementById("userId").value = "";
-                document.getElementById("saveBtn").textContent = "Add User";
-                document.getElementById("cancelBtn").classList.add("d-none");
-            }
-
-            document.getElementById("cancelBtn").addEventListener("click", resetForm);
-
-            async function deleteUser(id) {
-                if (confirm("Are you sure you want to delete this user?")) {
-                    await fetch(`${API_URL}/${id}`, { method: "DELETE"});
-                    alert("User deleted!");
-                    loadUsers();
-                }
-            }
-
-            loadUsers();
-        </script>
-    </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
