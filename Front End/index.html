@@ -125,12 +125,17 @@
   </div>
 
   <script>
-    const API_URL = "https://mongodb-crud-api-azs9.onrender.com/api/products";
-    const USERS_API_BASE = "https://mongodb-crud-api-azs9.onrender.com/api/users";
+    // BASE URLs (The render link points to your server.js)
+    const API_BASE_URL = "https://mongodb-crud-api-azs9.onrender.com";
+    const PRODUCTS_URL = `${API_BASE_URL}/api/products`;
+    const USERS_URL = `${API_BASE_URL}/api/users`; 
 
+    // =======================================================
+    // 🌐 CORE APP FUNCTIONS (LOAD PRODUCTS)
+    // =======================================================
     async function loadProducts() {
       try {
-        const res = await fetch(API_URL);
+        const res = await fetch(PRODUCTS_URL);
         const products = await res.json();
         const list = document.getElementById("productList");
         list.innerHTML = "";
@@ -144,7 +149,7 @@
           return;
         }
 
-        const featured = products.slice(0, 4); // only show 4
+        const featured = products.slice(0, 4); 
 
         featured.forEach(p => {
           const imageUrl = p.image || 'https://source.unsplash.com/400x250/?' + p.type + ',guitar';
@@ -169,12 +174,16 @@
     }
     loadProducts();
 
+    // =======================================================
+    // 🔐 AUTH LOGIC (With Admin Redirection)
+    // =======================================================
+
     // Register User: Uses POST /api/users
     document.getElementById("registerForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const name = regName.value, email = regEmail.value, password = regPassword.value;
       
-      const res = await fetch(USERS_API_BASE, {
+      const res = await fetch(USERS_URL, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ name, email, password })
@@ -184,7 +193,10 @@
       
       if (res.ok) {
         alert("Registration successful! You can now log in.");
-      } else if (data.error && data.error.includes('duplicate key error')) {
+        const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+        if (registerModal) registerModal.hide();
+        new bootstrap.Modal(document.getElementById('loginModal')).show();
+      } else if (data.error && data.error.includes('Email already registered')) {
         alert("Registration failed: This email is already in use.");
       } else {
         alert(data.error || "Registration failed. Check server logs.");
@@ -196,7 +208,7 @@
       e.preventDefault();
       const email = loginEmail.value, password = loginPassword.value;
       
-      const res = await fetch(`${USERS_API_BASE}/login`, {
+      const res = await fetch(`${USERS_URL}/login`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ email, password })
@@ -206,7 +218,20 @@
       
       if (res.ok) {
         alert("Login successful! Welcome, " + data.user.name + ".");
+        
+        // 🚨 CRITICAL ADMIN LOGIC 
+        localStorage.setItem("knavetoneIsAdmin", data.user.isAdmin);
         if (data.token) localStorage.setItem("knavetoneToken", data.token);
+
+        // Hide modal
+        const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+        if (loginModal) loginModal.hide();
+
+        // REDIRECT ADMIN USER
+        if (data.user.isAdmin) {
+          window.location.href = "admin.html";
+        }
+        
       } else {
         alert(data.message || "Login failed. Please check your credentials.");
       }
@@ -218,22 +243,17 @@
       const toggleIcon = document.getElementById(toggleId);
 
       toggleIcon.addEventListener("click", function () {
-        // Toggle the type attribute between 'password' and 'text'
         const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
         passwordInput.setAttribute("type", type);
 
-        // Toggle the icon (change the SVG path to show a closed/open eye)
         if (type === "text") {
-            // Currently showing password (Open Eye Icon)
             toggleIcon.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"></path><circle cx="12" cy="12" r="3"></circle>';
         } else {
-            // Currently hiding password (Closed Eye Icon with a slash)
             toggleIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-10-7-10-7a1.09 1.09 0 01-.27-.37m3.15-4.52A7.05 7.05 0 0112 10a2.9 2.9 0 012.87 2.44"></path><line x1="2" y1="2" x2="22" y2="22"></line>';
         }
       });
     }
 
-    // Apply the toggle function to both fields
     setupPasswordToggle("loginPassword", "toggleLoginPassword");
     setupPasswordToggle("regPassword", "toggleRegPassword");
   </script>

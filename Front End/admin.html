@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KnaveTone ⚡ Admin Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">KnaveTone ⚡</a>
+            <span class="navbar-text ms-auto me-3 text-warning">Welcome, Admin</span>
+            <button id="logoutBtn" class="btn btn-outline-cyber btn-sm">Logout</button>
+        </div>
+    </nav>
+
+    <section id="adminDashboard" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">⚙️ Admin Control Panel ⚙️</h2>
+
+            <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="products-tab" data-bs-toggle="tab" data-bs-target="#productsPanel" type="button" role="tab">Products Management</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#usersPanel" type="button" role="tab">Users Management</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="adminTabContent">
+                <div class="tab-pane fade show active" id="productsPanel" role="tabpanel">
+                    <h3>Add New Product</h3>
+                    <form id="addProductForm" class="p-4 mb-5 border rounded-3 bg-dark">
+                        <div class="row g-3">
+                            <div class="col-md-6"><input type="text" id="pName" class="form-control" placeholder="Name" required></div>
+                            <div class="col-md-6"><input type="text" id="pBrand" class="form-control" placeholder="Brand"></div>
+                            <div class="col-md-4"><input type="text" id="pType" class="form-control" placeholder="Type (e.g., Electric, Bass)"></div>
+                            <div class="col-md-4"><input type="number" id="pPrice" class="form-control" placeholder="Price (e.g., 1200)" required></div>
+                            <div class="col-md-4"><input type="number" id="pStock" class="form-control" placeholder="Stock" required></div>
+                            <div class="col-12"><input type="url" id="pImage" class="form-control" placeholder="Image URL"></div>
+                            <div class="col-12"><textarea id="pDescription" class="form-control" placeholder="Description"></textarea></div>
+                            <div class="col-12"><button type="submit" class="btn btn-primary w-100">Add Product</button></div>
+                        </div>
+                    </form>
+                    
+                    <h3>Existing Products</h3>
+                    <table class="table table-dark table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductTable">
+                            </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane fade" id="usersPanel" role="tabpanel">
+                    <h3>User Accounts</h3>
+                    <table class="table table-dark table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Admin Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUserTable">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 <span>KnaveTone</span> | Admin Dashboard</p>
+    </footer>
+
+    <script src="admin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

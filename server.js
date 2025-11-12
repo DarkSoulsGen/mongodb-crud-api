@@ -99,6 +99,30 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
+// 4. 🔄 UPDATE User Status (PUT /api/users/:id/admin)
+app.put("/api/users/:id/admin", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { isAdmin } = req.body;
+
+    // NOTE: In a production app, you MUST implement middleware here
+    // to check the JWT token and ensure the requesting user is an ADMIN.
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    user.isAdmin = isAdmin;
+    await user.save();
+
+    res.json({ message: `User ${user.email} admin status updated to ${isAdmin}.`, user: { id: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin } });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // =======================================================
 // 🎸 PRODUCT SCHEMA & ROUTES (No Change)
 // =======================================================
