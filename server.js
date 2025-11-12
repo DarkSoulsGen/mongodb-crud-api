@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -10,6 +11,9 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+
+// Debug: check if env is loaded
+console.log("🔍 MONGODB_URI:", process.env.MONGODB_URI);
 
 // =======================================================
 // 🧠 MONGO CONNECTION
@@ -29,6 +33,7 @@ const UserSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true } 
+  isAdmin: { type: Boolean, default: false}
 });
 const User = mongoose.model("User", UserSchema);
 
