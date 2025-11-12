@@ -18,21 +18,19 @@ console.log("🔍 MONGODB_URI:", process.env.MONGODB_URI);
 // =======================================================
 // 🧠 MONGO CONNECTION
 // =======================================================
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+// Removed deprecated options and connected using the environment variable.
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connected successfully!'))
   .catch(err => console.error('❌ MongoDB connection error:', err));
 
 // =======================================================
 // 🧑 USER SCHEMA (Unified for Auth)
 // =======================================================
-// The schema now correctly includes the password field for all user operations.
+// FIX: Added comma after the 'password' field.
 const UserSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true, required: true },
-  password: { type: String, required: true } 
+  password: { type: String, required: true }, // <--- COMMA ADDED HERE
   isAdmin: { type: Boolean, default: false}
 });
 const User = mongoose.model("User", UserSchema);
@@ -57,6 +55,7 @@ app.post("/api/users", async (req, res) => {
     }
 
     // Create and save new user
+    // The isAdmin field will automatically be set to 'false' by default
     const newUser = new User({ name, email, password });
     await newUser.save();
 
@@ -81,7 +80,7 @@ app.post("/api/users/login", async (req, res) => {
     // Login successful
     res.json({ 
         message: "Login successful!", 
-        user: { id: user._id, name: user.name, email: user.email },
+        user: { id: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin },
         token: "fake-jwt-token" // Placeholder token
     });
   } catch (err) {
