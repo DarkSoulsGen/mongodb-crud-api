@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -10,65 +11,92 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// MongoDB Connection
-mongoose.connect('mongodb+srv://tadakuni761:Knave21@school.osancrw.mongodb.net/GuitarStore?appName=School')
+// =======================================================
+// 🧠 MONGO CONNECTION
+// =======================================================
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
   .then(() => console.log('✅ MongoDB connected successfully!'))
   .catch(err => console.error('❌ MongoDB connection error:', err));
 
 // =======================================================
-// 🧑 USER SCHEMA (Basic CRUD)
+// 🧑 USER SCHEMA (Unified for Auth)
 // =======================================================
+// The schema now correctly includes the password field for all user operations.
 const UserSchema = new mongoose.Schema({
   name: String,
-  email: String
+  email: { type: String, unique: true, required: true },
+  password: { type: String, required: true } 
 });
 const User = mongoose.model("User", UserSchema);
 
-// ==== CRUD Routes for Users ====
+// =======================================================
+// ➡️ USER AUTH ROUTES
+// (All using the /api/users base path)
+// =======================================================
+
+// 1. ✍️ REGISTER / CREATE User (POST /api/users)
 app.post("/api/users", async (req, res) => {
-  const { name, email } = req.body;
   try {
-    const newUser = new User({ name, email });
+    const { name, email, password } = req.body;
+    
+    // Check for existing user with the same email
+    const existing = await User.findOne({ email });
+    if (existing) {
+        return res.status(400).json({ 
+            error: "Email already registered.", 
+            message: "This email is already in use." 
+        });
+    }
+
+    // Create and save new user
+    const newUser = new User({ name, email, password });
     await newUser.save();
-    res.json(newUser);
+
+    res.json({ message: "Registration successful!", user: newUser });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
+// 2. 🔑 LOGIN User (POST /api/users/login)
+app.post("/api/users/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Find a user with matching email AND password
+    const user = await User.findOne({ email, password });
+    
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password." });
+    }
+
+    // Login successful
+    res.json({ 
+        message: "Login successful!", 
+        user: { id: user._id, name: user.name, email: user.email },
+        token: "fake-jwt-token" // Placeholder token
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 3. 👓 READ Users (GET /api/users)
 app.get("/api/users", async (req, res) => {
   try {
-    const users = await User.find();
+    // Exclude password from query result
+    const users = await User.find().select('-password'); 
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-app.put("/api/users/:id", async (req, res) => {
-  try {
-    const updateUser = await User.findByIdAndUpdate(
-      req.params.id,
-      { name: req.body.name, email: req.body.email },
-      { new: true }
-    );
-    res.json(updateUser);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.delete("/api/users/:id", async (req, res) => {
-  try {
-    await User.findByIdAndDelete(req.params.id);
-    res.json({ message: "User deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 // =======================================================
-// 🎸 PRODUCT SCHEMA & ROUTES
+// 🎸 PRODUCT SCHEMA & ROUTES (No Change)
 // =======================================================
 const ProductSchema = new mongoose.Schema({
   name: String,
@@ -127,45 +155,6 @@ app.delete("/api/products/:id", async (req, res) => {
 });
 
 // =======================================================
-// 👤 SIMPLE AUTH (no hashing, no JWT)
-// =======================================================
-const AuthSchema = new mongoose.Schema({
-  name: String,
-  email: { type: String, unique: true },
-  password: String
-});
-const AuthUser = mongoose.model("AuthUser", AuthSchema);
-
-// REGISTER
-app.post("/api/auth/register", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const existing = await AuthUser.findOne({ email });
-    if (existing) return res.status(400).json({ message: "Email already registered." });
-
-    const newUser = new AuthUser({ name, email, password });
-    await newUser.save();
-
-    res.json({ message: "Registration successful!" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// LOGIN
-app.post("/api/auth/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await AuthUser.findOne({ email, password });
-    if (!user) return res.status(401).json({ message: "Invalid email or password." });
-
-    res.json({ message: "Login successful!", user });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// =======================================================
 // 🌐 DEPLOYMENT FIXES
 // =======================================================
 
@@ -173,7 +162,7 @@ app.post("/api/auth/login", async (req, res) => {
 app.get("/", (req, res) => {
   res.json({
     message: "Welcome to the KnaveTone MERN API!",
-    available_endpoints: ["/api/users", "/api/products", "/api/auth"]
+    available_endpoints: ["/api/users", "/api/users/login", "/api/products"]
   });
 });
 
