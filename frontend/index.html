@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KnaveTone ⚡ Boutique Guitars</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" href="favicon.ico" type="image/x-icon"> <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
@@ -20,244 +20,158 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto align-items-center">
-          <li class="nav-item"><a class="nav-link" href="#products">Shop</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Categories</a></li>
+        <ul class="navbar-nav ms-auto align-items-center" id="navAuthLinks">
+          <li class="nav-item"><a class="nav-link" href="product.html">Shop</a></li>
           <li class="nav-item"><a class="nav-link" href="#">About</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-          <li class="nav-item">
-            <a class="btn btn-outline-cyber ms-3" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
-              Login / Sign Up
-            </a>
-          </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <section class="hero">
-    <h1>KnaveTone</h1>
-    <p>Echoes of rebellion, shaped in sound and steel.</p>
-    <a href="product.html" class="btn btn-lg btn-primary">Explore Now</a>
-  </section>
-
-  <section class="featured-section py-5">
+  <section class="hero text-center d-flex align-items-center justify-content-center">
     <div class="container">
-      <h2 class="section-title text-center mb-5" id="products">⚡ Featured Instruments ⚡</h2>
-      <div id="productList" class="row g-4 justify-content-center"></div>
+      <h1 class="display-3 fw-bold text-uppercase">The Future of Tone.</h1>
+      <p class="lead mb-4">Cyberpunk-inspired guitars for the modern virtuoso.</p>
+      <a href="product.html" class="btn btn-warning btn-lg fw-bold">Explore Our Gear</a>
     </div>
   </section>
 
-  <footer>
-    <p>© 2025 <span>KnaveTone</span> | Crafted by Genesis “DarkSouls Knave”</p>
+  <section class="container py-5">
+    <h2 class="text-center mb-5 text-warning fw-bold">Featured Gear</h2>
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="featuredProductsList">
+      <div class="col-12 text-center text-muted p-5">Loading featured products...</div>
+    </div>
+  </section>
+  
+  <footer class="footer mt-auto py-3 text-center">
+    <div class="container">
+      <span class="text-muted">&copy; 2025 KnaveTone ⚡. All rights reserved.</span>
+    </div>
   </footer>
 
   <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header border-0">
-          <h5 class="modal-title" id="loginModalLabel">Login to KnaveTone</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold text-warning" id="loginModalLabel">Login Access</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body pt-0">
           <form id="loginForm">
             <div class="mb-3">
-              <label>Email</label>
-              <input type="email" id="loginEmail" class="form-control" required>
+              <label for="loginEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="loginEmail" required>
             </div>
             <div class="mb-3">
-              <label>Password</label>
-              <div class="password-wrapper">
-                <input type="password" id="loginPassword" class="form-control" required>
-                <svg class="toggle-password" id="toggleLoginPassword" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"></path><circle cx="12" cy="12" r="3"></circle>
-                </svg>
+              <label for="loginPassword" class="form-label">Password</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="loginPassword" required>
+                <button class="btn btn-outline-info" type="button" id="toggleLoginPassword">
+                  <svg id="loginToggleIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye-off"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-10-7-10-7a1.09 1.09 0 01-.27-.37m-2.19-2.19l-1.02-1.02a1.09 1.09 0 010-1.09l.37-.27c.33-.24.7-.46 1.07-.66M12 4c7 0 10 7 10 7a1.09 1.09 0 01-.27.37m-2.19 2.19l-1.02 1.02a1.09 1.09 0 010 1.09l.37.27c.33.24.7.46 1.07.66M12 12a3 3 0 110-6 3 3 0 010 6z" /><line x1="1" y1="1" x2="23" y2="23" /></svg>
+                </button>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <div id="loginAlert" class="alert d-none" role="alert"></div>
+            <button type="submit" class="btn btn-warning w-100 mt-3 fw-bold">Login</button>
+            <p class="mt-3 text-center">New user? <a href="register.html" class="text-info">Register here</a></p>
           </form>
-          <div class="text-center mt-3">
-            <small>Don’t have an account?
-              <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Register</a>
-            </small>
-          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header border-0">
-          <h5 class="modal-title" id="registerModalLabel">Create a KnaveTone Account</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <form id="registerForm">
-            <div class="mb-3">
-              <label>Name</label>
-              <input type="text" id="regName" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label>Email</label>
-              <input type="email" id="regEmail" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label>Password</label>
-              <div class="password-wrapper">
-                <input type="password" id="regPassword" class="form-control" required>
-                <svg class="toggle-password" id="toggleRegPassword" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"></path><circle cx="12" cy="12" r="3"></circle>
-                </svg>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Register</button>
-          </form>
-          <div class="text-center mt-3">
-            <small>Already have an account?
-              <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Login</a>
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
   <script>
-    // BASE URLs (The render link points to your server.js)
-    const API_BASE_URL = "https://mongodb-crud-api-azs9.onrender.com";
+    // ** GLOBAL CONSTANTS DEFINED ONCE HERE FOR ALL SCRIPTS **
+    const API_BASE_URL = "http://localhost:5000"; 
     const PRODUCTS_URL = `${API_BASE_URL}/api/products`;
-    const USERS_URL = `${API_BASE_URL}/api/users`; 
-
-    // =======================================================
-    // 🌐 CORE APP FUNCTIONS (LOAD PRODUCTS)
-    // =======================================================
-    async function loadProducts() {
-      try {
-        const res = await fetch(PRODUCTS_URL);
-        const products = await res.json();
-        const list = document.getElementById("productList");
-        list.innerHTML = "";
-
-        if (products.length === 0) {
-          list.innerHTML = `
-            <div class="text-center text-muted mt-5">
-              <h5>No products available yet.</h5>
-              <p>Check back soon for new arrivals.</p>
-            </div>`;
-          return;
-        }
-
-        const featured = products.slice(0, 4); 
-
-        featured.forEach(p => {
-          const imageUrl = p.image || 'https://source.unsplash.com/400x250/?' + p.type + ',guitar';
-
-          list.innerHTML += `
-            <div class="col-sm-6 col-md-4 col-lg-3">
-              <div class="card shadow-sm h-100">
-                <img src="${imageUrl}"
-                     class="card-img-top" alt="${p.name}">
-                <div class="card-body text-center">
-                  <h5 class="card-title">${p.name}</h5>
-                  <p class="text-muted">${p.brand}</p>
-                  <p class="fw-bold">₱${p.price}</p>
-                  <button class="btn btn-primary btn-sm">Add to Cart</button>
-                </div>
-              </div>
-            </div>`;
-        });
-      } catch (error) {
-        console.error("Error loading products:", error);
-      }
-    }
-    loadProducts();
-
-    // =======================================================
-    // 🔐 AUTH LOGIC (With Admin Redirection)
-    // =======================================================
-
-    // Register User: Uses POST /api/users
-    document.getElementById("registerForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const name = regName.value, email = regEmail.value, password = regPassword.value;
+    const USERS_URL = `${API_BASE_URL}/api/users`;
+    const PROFILE_URL = `${USERS_URL}/profile`;
+    const REGISTER_URL = `${USERS_URL}/register`;
+    const LOGIN_URL = `${USERS_URL}/login`;
+    
+    // Global Utility Functions (Used by all pages with index.js/home.js)
+    window.showAlert = function (message, type) {
+      const alertEl = document.getElementById("loginAlert") || document.getElementById("registerAlert");
+      if (!alertEl) return;
       
-      const res = await fetch(USERS_URL, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ name, email, password })
-      });
-      
-      const data = await res.json();
-      
-      if (res.ok) {
-        alert("Registration successful! You can now log in.");
-        const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
-        if (registerModal) registerModal.hide();
-        new bootstrap.Modal(document.getElementById('loginModal')).show();
-      } else if (data.error && data.error.includes('Email already registered')) {
-        alert("Registration failed: This email is already in use.");
-      } else {
-        alert(data.error || "Registration failed. Check server logs.");
-      }
-    });
+      alertEl.classList.remove("d-none", "alert-success", "alert-danger", "alert-warning", "alert-info");
+      alertEl.classList.add(`alert-${type}`);
+      alertEl.textContent = message;
 
-    // Login User: Uses POST /api/users/login
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = loginEmail.value, password = loginPassword.value;
-      
-      const res = await fetch(`${USERS_URL}/login`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ email, password })
-      });
+      // Auto-hide alert after 3 seconds
+      setTimeout(() => {
+          alertEl.classList.add("d-none");
+      }, 3000);
+    };
 
-      const data = await res.json();
-      
-      if (res.ok) {
-        alert("Login successful! Welcome, " + data.user.name + ".");
-        
-        // 🚨 CRITICAL ADMIN LOGIC 
-        localStorage.setItem("knavetoneIsAdmin", data.user.isAdmin);
-        if (data.token) localStorage.setItem("knavetoneToken", data.token);
-
-        // Hide modal
-        const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
-        if (loginModal) loginModal.hide();
-
-        // REDIRECT ADMIN USER
-        if (data.user.isAdmin) {
-          window.location.href = "admin.html";
-        }
-        
-      } else {
-        alert(data.message || "Login failed. Please check your credentials.");
-      }
-    });
-
-    // ================= PASSWORD TOGGLE LOGIC =================
-    function setupPasswordToggle(inputId, toggleId) {
+    window.setupPasswordToggle = function (inputId, toggleId) {
       const passwordInput = document.getElementById(inputId);
       const toggleIcon = document.getElementById(toggleId);
+
+      if (!passwordInput || !toggleIcon) return; 
 
       toggleIcon.addEventListener("click", function () {
         const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
         passwordInput.setAttribute("type", type);
 
+        // SVG updates (open eye / closed eye)
         if (type === "text") {
             toggleIcon.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"></path><circle cx="12" cy="12" r="3"></circle>';
         } else {
-            toggleIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-10-7-10-7a1.09 1.09 0 01-.27-.37m3.15-4.52A7.05 7.05 0 0112 10a2.9 2.9 0 012.87 2.44"></path><line x1="2" y1="2" x2="22" y2="22"></line>';
+            toggleIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-10-7-10-7a1.09 1.09 0 01-.27-.37m-2.19-2.19l-1.02-1.02a1.09 1.09 0 010-1.09l.37-.27c.33-.24.7-.46 1.07-.66M12 4c7 0 10 7 10 7a1.09 1.09 0 01-.27.37m-2.19 2.19l-1.02 1.02a1.09 1.09 0 010 1.09l.37.27c.33.24.7.46 1.07.66M12 12a3 3 0 110-6 3 3 0 010 6z" /><line x1="1" y1="1" x2="23" y2="23" />';
         }
       });
-    }
+    };
 
-    setupPasswordToggle("loginPassword", "toggleLoginPassword");
-    setupPasswordToggle("regPassword", "toggleRegPassword");
+    document.addEventListener("DOMContentLoaded", () => {
+      // Setup login form password visibility toggle
+      setupPasswordToggle("loginPassword", "toggleLoginPassword");
+
+      // Login Form Submission
+      const loginForm = document.getElementById("loginForm");
+      if (loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const email = document.getElementById("loginEmail").value;
+          const password = document.getElementById("loginPassword").value;
+
+          try {
+            const res = await fetch(LOGIN_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+              // Store token and redirect
+              localStorage.setItem("knavetoneToken", data.token);
+              // Store isAdmin for easy client-side check
+              localStorage.setItem("knavetoneIsAdmin", data.isAdmin);
+              // Note: showAlert function uses the modal's alert box
+              window.showAlert("Login successful! Redirecting...", "success"); 
+              setTimeout(() => window.location.reload(), 1500); // Reloads the page to update the navbar
+            } else {
+              window.showAlert(data.message || "Login failed. Check credentials.", "danger");
+            }
+          } catch (err) {
+            console.error(err);
+            window.showAlert("An error occurred during login. Please try again.", "danger");
+          }
+        });
+      }
+    });
+
   </script>
+  
+  <script src="index.js"></script>
+  <script src="home.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -35,181 +35,62 @@ body {
   background: linear-gradient(135deg, #0c0c12, #111118, #1a1a25);
   color: #fff;
   text-align: center;
-  padding: 6rem 2rem;
-  position: relative;
-  overflow: hidden;
+  padding: 5rem 0;
+  border-bottom: 2px solid rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
 }
-.hero::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.1), transparent 70%);
-  pointer-events: none;
-  animation: pulse 6s infinite alternate;
-}
-@keyframes pulse {
-  from {opacity: 0.4;}
-  to {opacity: 0.8;}
-}
+
 .hero h1 {
   font-family: 'Orbitron', sans-serif;
   font-size: 3rem;
-  color: #00ffff;
   text-shadow: 0 0 15px #00ffff;
+  color: #fff;
 }
+
 .hero p {
-  font-size: 1.2rem;
-  margin-top: 1rem;
-  color: #cfcfcf;
-}
-.hero .btn {
-  margin-top: 1.5rem;
-  background-color: transparent;
-  border: 1px solid #00ffff;
-  color: #00ffff;
-  transition: all 0.3s ease;
-}
-.hero .btn:hover {
-  background-color: #00ffff;
-  color: #0a0a0f;
-  box-shadow: 0 0 20px #00ffff;
+  max-width: 700px;
+  margin: 1rem auto 2rem;
+  font-size: 1.1rem;
+  color: #ccc;
 }
 
-/* Global H2 */
-h2 {
-  font-family: 'Orbitron', sans-serif;
-  color: #00ffff;
-  text-align: center;
-  margin-bottom: 2rem;
-  text-shadow: 0 0 10px #00ffff;
-}
-.card-body {
-  color: #ddd;
-}
-
-/* Footer */
-footer {
-  margin-top: 5rem;
-  background-color: #0d0d13;
-  padding: 2rem;
-  text-align: center;
-  color: #666;
-  border-top: 1px solid rgba(0,255,255,0.1);
-}
-footer span {
-  color: #00ffff;
-}
-
-/* ==== CYBER LOGIN/SIGNUP BUTTON ==== */
-.btn-outline-cyber {
-  border: 1px solid #00ffff;
-  color: #00ffff;
-  padding: 6px 16px;
-  border-radius: 6px;
-  font-weight: 500;
-  font-family: 'Orbitron', sans-serif;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  box-shadow: 0 0 6px rgba(0,255,255,0.3);
-  transition: all 0.3s ease;
-}
-
-.btn-outline-cyber:hover {
-  background: #00ffff;
-  color: #111;
-  box-shadow: 0 0 16px rgba(0,255,255,0.8);
-  text-shadow: none;
-  transform: scale(1.05);
-}
-
-/* ==== FEATURED INSTRUMENTS SECTION ==== */
-.featured-section {
-  background: linear-gradient(180deg, #0a0a12 0%, #111118 100%);
-  color: #e0e0e0;
-  border-top: 1px solid rgba(0,255,255,0.1);
-  border-bottom: 1px solid rgba(0,255,255,0.1);
-}
-
+/* Section Title */
 .section-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 2rem;
-  font-weight: 600;
   color: #00ffff;
-  text-shadow: 0 0 12px rgba(0,255,255,0.5);
-  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
 }
 
+/* Products and Cards */
 .card {
-  background-color: #141420;
-  border: 1px solid rgba(0,255,255,0.2);
-  border-radius: 12px;
-  transition: all 0.3s ease;
+  background-color: #1a1a25;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  color: #e0e0e0;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 0 20px rgba(0,255,255,0.3);
+  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
 }
 
-.card .card-title {
-  color: #00ffff;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 500;
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
 }
 
-.card .fw-bold {
-  color: #fff;
-}
-
-.card img {
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  border-bottom: 1px solid rgba(0,255,255,0.2);
-}
-
-
-/* === AUTH MODALS === */
-.modal-content {
-  background-color: #111118 !important;
-  border: 1px solid rgba(0, 255, 255, 0.2);
-  box-shadow: 0 0 25px rgba(0, 255, 255, 0.1);
-  color: #e0e0e0;
-  border-radius: 10px;
-}
-
-.modal-header h5 {
+.card-title {
   font-family: 'Orbitron', sans-serif;
   color: #00ffff;
-  text-shadow: 0 0 10px rgba(0,255,255,0.5);
 }
 
-/* Ensure the close button is visible */
-.btn-close.btn-close-white {
-  filter: invert(1) brightness(200%);
-}
-
-/* Base style for form inputs */
-.form-control {
-  background-color: #1a1a25;
-  color: #fff;
-  border: 1px solid rgba(0,255,255,0.2);
-  transition: all 0.3s ease;
-}
-
-/* FIX: Style when the input is clicked (focused) to ensure visibility */
-.form-control:focus {
-  background-color: #252533; /* Slightly lighter dark background */
-  color: #fff;              /* Bright white text */
-  border-color: #00ffff;
-  box-shadow: 0 0 8px rgba(0,255,255,0.5);
-}
-
-/* Primary buttons (Used on cards and modals) */
+/* Buttons (Cyberpunk Style) */
 .btn-primary {
-  background-color: transparent;
-  border: 1px solid #00ffff;
-  color: #00ffff;
+  background-color: #00ffff;
+  border-color: #00ffff;
+  color: #0a0a0f;
   font-family: 'Orbitron', sans-serif;
   letter-spacing: 1px;
   transition: all 0.3s ease;
@@ -221,43 +102,99 @@ footer span {
   box-shadow: 0 0 20px #00ffff;
 }
 
-.modal small a {
+.btn-outline-cyber {
   color: #00ffff;
-  text-decoration: none;
-  transition: color 0.2s ease;
+  border-color: #00ffff;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  transition: all 0.3s ease;
 }
 
-.modal small a:hover {
-  color: #fff;
+.btn-outline-cyber:hover {
+  background-color: #00ffff;
+  color: #0a0a0f;
+  box-shadow: 0 0 25px #00ffff;
 }
 
-/* ==== SMALL & CLEAN SVG TOGGLE ICON (for password) ==== */
-.password-wrapper {
-  position: relative;
+/* Footer */
+footer {
+  background-color: #111118;
+  border-top: 1px solid rgba(0, 255, 255, 0.1);
+  padding: 1rem 0;
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
 }
 
-.toggle-password {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  opacity: 0.6;
-  transition: 0.3s ease;
-  stroke-width: 1.8;
-  /* Set default stroke color for the icon */
-  stroke: #00ffff; 
+footer span {
+  color: #00ffff;
+  font-family: 'Orbitron', sans-serif;
 }
 
-.toggle-password:hover {
-  opacity: 1;
-  filter: drop-shadow(0 0 4px #00ffff);
+/* Custom button for Categories */
+.btn-cyber-cat {
+    color: #00ffff;
+    border: 1px solid #00ffff;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    margin-right: 0.5rem;
+}
+
+.btn-cyber-cat.active, .btn-cyber-cat:hover {
+    background-color: #00ffff;
+    color: #0a0a0f;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+}
+
+
+/* =======================================================
+   🧑 USER PROFILE NAVIGATION (NEW)
+   ======================================================= */
+
+/* Profile Picture container and image style */
+.profile-dropdown-toggle {
+  padding: 0;
+  border: 2px solid transparent; /* Placeholder for hover effect */
+  background: none;
+  border-radius: 50%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-dropdown-toggle:hover {
+  border-color: #00ffff; /* Cyber glow border on hover */
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.profile-img {
+  width: 40px; /* Size of the profile image */
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #111118; /* Inner border to separate from dropdown toggle border */
+}
+
+/* Custom dark dropdown menu */
+.dropdown-menu-cyber {
+  background-color: #111118; /* Dark background similar to navbar */
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
+}
+
+.dropdown-menu-cyber .dropdown-item {
+  color: #e0e0e0;
+}
+
+.dropdown-menu-cyber .dropdown-item:hover,
+.dropdown-menu-cyber .dropdown-item:focus {
+  background-color: #1a1a25; /* Slightly lighter dark background on hover */
+  color: #00ffff;
+}
+
+.dropdown-menu-cyber .dropdown-divider {
+  border-top-color: rgba(0, 255, 255, 0.1);
 }
 
 /* =======================================================
-   ✅ FIX FOR DUPLICATE BROWSER/EXTENSION TOGGLE BUTTONS
+   ✅ FIX FOR AUTOFILL ICONS (Existing)
    ======================================================= */
 /* Hides the eye/reveal button often injected by Chrome/Edge/Firefox */
 input::-ms-reveal,
@@ -272,8 +209,9 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   pointer-events: none; /* Prevents interaction */
   position: absolute; /* Ensures no layout shift */
   right: 0;
+}
 
-  /* =======================================================
+/* =======================================================
    🧭 CUSTOM BREADCRUMB (Home / Products)
    ======================================================= */
 nav[aria-label="breadcrumb"] {
@@ -295,25 +233,47 @@ nav[aria-label="breadcrumb"] {
   letter-spacing: 0.5px;
 }
 
-.breadcrumb-item a:hover {
-  color: #fff;
-  text-shadow: 0 0 5px #00ffff;
-}
-
-.breadcrumb-item + .breadcrumb-item::before {
-  content: "/";
-  color: rgba(0,255,255,0.5);
-  padding: 0 6px;
-}
-
 .breadcrumb-item.active {
-  color: #fff;
-  text-shadow: 0 0 8px #00ffff;
+  color: #ccc;
 }
 
-#categoryButtons .btn.active {
-  background-color: #00ffff;
-  color: #0a0a0f;
-  box-shadow: 0 0 10px #00ffff;
+/* =======================================================
+   🕶️  Dark Cyberpunk Modals (override Bootstrap defaults)
+   ======================================================= */
+.modal-content {
+  background-color: #111118 !important;
+  color: #e0e0e0 !important;
+  border: 1px solid rgba(0,255,255,0.2);
+  box-shadow: 0 0 25px rgba(0,255,255,0.2);
 }
+
+.modal-header {
+  border-bottom: 1px solid rgba(0,255,255,0.1);
+}
+
+.modal-title {
+  color: #00ffff;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+
+.modal-body label {
+  color: #ccc;
+}
+
+.form-control {
+  background-color: #1a1a25;
+  color: #fff;
+  border: 1px solid rgba(0,255,255,0.2);
+}
+
+.form-control:focus {
+  background-color: #252533;
+  color: #fff;
+  border-color: #00ffff;
+  box-shadow: 0 0 8px rgba(0,255,255,0.5);
+}
+
+.btn-close.btn-close-white {
+  filter: invert(1) brightness(200%);
 }
