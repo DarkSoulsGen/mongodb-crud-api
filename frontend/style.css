@@ -272,4 +272,48 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   pointer-events: none; /* Prevents interaction */
   position: absolute; /* Ensures no layout shift */
   right: 0;
+
+  /* =======================================================
+   🧭 CUSTOM BREADCRUMB (Home / Products)
+   ======================================================= */
+nav[aria-label="breadcrumb"] {
+  background-color: #141420;
+  border-bottom: 1px solid rgba(0,255,255,0.2);
+  box-shadow: 0 2px 10px rgba(0,255,255,0.05);
+}
+
+.breadcrumb {
+  background-color: transparent;
+  margin-bottom: 0;
+  padding: 0.5rem 0;
+}
+
+.breadcrumb-item a {
+  color: #00ffff;
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.breadcrumb-item a:hover {
+  color: #fff;
+  text-shadow: 0 0 5px #00ffff;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "/";
+  color: rgba(0,255,255,0.5);
+  padding: 0 6px;
+}
+
+.breadcrumb-item.active {
+  color: #fff;
+  text-shadow: 0 0 8px #00ffff;
+}
+
+#categoryButtons .btn.active {
+  background-color: #00ffff;
+  color: #0a0a0f;
+  box-shadow: 0 0 10px #00ffff;
+}
 }
