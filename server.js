@@ -366,6 +366,30 @@ app.put("/api/users/:id/admin", authMiddleware, async (req, res) => {
     }
 });
 
+// 8. DELETE User (DELETE /api/users/:id) – ADMIN ONLY
+app.delete("/api/users/:id", authMiddleware, async (req, res) => {
+  try {
+    // Ensure only admins can perform this action
+    if (!req.user.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+
+    // Prevent an admin from deleting their own account
+    if (req.user._id.toString() === req.params.id) {
+      return res.status(403).json({ message: "Admins cannot delete their own account." });
+    }
+
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ message: "User deleted successfully." });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // =======================================================
 // 🎸 PRODUCT ROUTES (/api/products)
