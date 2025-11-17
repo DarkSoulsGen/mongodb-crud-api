@@ -145,6 +145,36 @@ footer span {
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
 }
 
+/* Cyber hover effect for Login link */
+.login-link {
+  color: #bbb !important;
+  position: relative;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.login-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #00ffff, #ff00ff);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.login-link:hover {
+  color: #00ffff !important;
+  text-shadow: 0 0 8px rgba(0,255,255,0.8);
+}
+
+.login-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
 
 /* =======================================================
    🧑 USER PROFILE NAVIGATION (NEW)
@@ -276,4 +306,26 @@ nav[aria-label="breadcrumb"] {
 
 .btn-close.btn-close-white {
   filter: invert(1) brightness(200%);
+}
+
+/* 1. Lighter, more readable grey for low-contrast text on dark backgrounds */
+.text-light-muted {
+    color: #b0b0b0 !important; /* A more visible grey */
+}
+
+/* 2. Cart Item Image styles (Moved from inline <style> in cart.html) */
+.cart-item-img {
+    width: 100px; 
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Toast Style Enhancements */
+.toast {
+  background-color: #111118 !important;
+  border: 1px solid rgba(0,255,255,0.2);
+  box-shadow: 0 0 12px rgba(0,255,255,0.5);
+  font-family: 'Poppins', sans-serif;
+  color: #00ffff !important;
 }

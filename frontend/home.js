@@ -102,7 +102,27 @@ function saveCart(c){
     localStorage.setItem("knavetoneCart", JSON.stringify(c)); 
 }
 
+function isUserLoggedIn() {
+    return !!localStorage.getItem("knavetoneToken");
+}
+
 function addToCart(p){
+    // ✅ NEW: Authentication Check
+    if (!isUserLoggedIn()) {
+        const loginModalEl = document.getElementById('loginModal');
+        if (loginModalEl) {
+            // Check if bootstrap is defined before calling the constructor
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                const loginModal = new bootstrap.Modal(loginModalEl);
+                loginModal.show();
+                showCustomAlert("Please login or register to add items to your cart.", "warning");
+            } else {
+                alert("Please login or register to add items to your cart.");
+            }
+        }
+        return; 
+    }
+
     const c=getCart();
     // Check for stock before adding
     const itemInCart = c.find(i => i.id === p.id);

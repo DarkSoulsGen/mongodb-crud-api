@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KnaveTone ⚡ | Your Cart</title>
+
+  <link rel="icon" href="favicon.ico" type="image/x-icon"> <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Poppins:wght@300;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-dark text-light">
+
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">KnaveTone ⚡</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- The navigation links will be dynamically populated by index.js -->
+        <ul class="navbar-nav ms-auto align-items-center" id="navAuthLinks"> 
+          <li class="nav-item"><a class="nav-link" href="product.html">Shop</a></li>
+          <li class="nav-item"><a class="nav-link active text-info" href="cart.html">Cart (<span id="cartCountNav">0</span>)</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <nav aria-label="breadcrumb" class="text-light">
+    <div class="container">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html" class="text-info">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+      </ol>
+    </div>
+  </nav>
+
+  <section class="container py-5">
+    <h1 class="section-title mb-5">Your Shopping Cart</h1>
+    
+    <div class="row">
+      
+      <!-- Cart Items List (left side) -->
+      <div class="col-lg-8 mb-4">
+        <div id="cartItemsList" class="d-flex flex-column gap-3">
+          <!-- Cart items will be rendered here by cart.js -->
+          <div class="text-center text-light-muted py-5" id="emptyCartMessage">Your cart is empty.</div>
+        </div>
+      </div>
+
+      <!-- Order Summary (right side) -->
+      <div class="col-lg-4">
+        <!-- Order Summary Card -->
+        <div class="card p-4 sticky-top" style="top: 70px;">
+          <h5 class="card-title text-warning mb-4">Order Summary</h5>
+          
+          <!-- Subtotal Row -->
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-light-muted">Subtotal:</span>
+            <span class="fw-bold" id="cartSubtotal">$0.00</span>
+          </div>
+
+          <!-- Tax Row -->
+          <div class="d-flex justify-content-between mb-3 border-bottom pb-3">
+            <span class="text-light-muted">Estimated Tax (7%):</span>
+            <span class="fw-bold" id="cartTax">$0.00</span>
+          </div>
+
+          <!-- Total Row -->
+          <div class="d-flex justify-content-between mb-4">
+            <h5 class="text-info">Order Total:</h5>
+            <h5 class="text-info fw-bold" id="cartTotal">$0.00</h5>
+          </div>
+
+          <button class="btn btn-primary w-100" id="checkoutBtn" disabled>Proceed to Checkout</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Alert Modal (re-used from index.html) -->
+    <div class="modal fade" id="customAlertModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="customAlertTitle">Alert</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="customAlertBody"></div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-cyber" data-bs-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="footer mt-auto py-3 text-center">
+    <div class="container">
+      <span class="text-muted">&copy; 2025 KnaveTone ⚡. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // ** GLOBAL CONSTANTS DEFINED ONCE HERE **
+    const API_BASE_URL = "http://localhost:5000"; 
+    // window.API_BASE_URL = "https://mongodb-crud-api-azs9.onrender.com";
+    const PRODUCTS_URL = `${API_BASE_URL}/api/products`;
+    const USERS_URL = `${API_BASE_URL}/api/users`;
+    const PROFILE_URL = `${USERS_URL}/profile`;
+    const LOGIN_URL = `${USERS_URL}/login`;
+    const REGISTER_URL = `${USERS_URL}`;
+
+    // Global utility for showing custom alerts
+    const customAlertModal = new bootstrap.Modal(document.getElementById('customAlertModal'));
+    window.showAlert = function(message, type) {
+        const titleEl = document.getElementById('customAlertTitle');
+        const bodyEl = document.getElementById('customAlertBody');
+        
+        // Reset and set content
+        titleEl.textContent = type === 'success' ? 'Success' : type === 'danger' ? 'Error' : 'Alert';
+        titleEl.classList.remove('text-info', 'text-warning', 'text-danger');
+        titleEl.classList.add(type === 'success' ? 'text-warning' : type === 'danger' ? 'text-danger' : 'text-info');
+        
+        bodyEl.textContent = message;
+        
+        customAlertModal.show();
+    }
+
+    /**
+     * Reusable function to update the cart count in the navbar (used by cart.js and home.js)
+     * @param {number} count - The number of items in the cart.
+     */
+    window.updateCartCount = function(count) {
+        const cartCountNav = document.getElementById('cartCountNav');
+        if (cartCountNav) {
+            cartCountNav.textContent = count;
+        }
+    }
+  </script>
+  
+  <script src="index.js"></script>
+  <script src="cart.js"></script>
+
+</body>
+</html>
