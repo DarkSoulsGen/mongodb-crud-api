@@ -13,6 +13,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const DEFAULT_PROFILE_PIC = "/uploads/default.png";
 
+// ✅ FIX 1: Set Base URL to Render (Fallbacks to localhost only if running locally)
+const BASE_URL = process.env.BASE_URL || "https://mongodb-crud-api-azs9.onrender.com";
+
 // =======================================================
 // ⬇️ MULTER CONFIGURATION (Memory Storage for Base64)
 // =======================================================
@@ -31,10 +34,18 @@ const upload = multer({
 // =======================================================
 // 📦 MIDDLEWARE
 // =======================================================
-app.use(cors());
+// ✅ FIX 2: Allow Netlify to talk to Render
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
+
 app.use(bodyParser.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use(express.static(path.join(__dirname, "frontend")));
+
+// ❌ REMOVED: app.use(express.static... frontend) 
+// Reason: Netlify is now doing this job.
 
 // =======================================================
 // 💿 MONGOOSE CONNECTION
@@ -356,7 +367,7 @@ app.delete("/api/users/:id", authMiddleware, async (req, res) => {
 });
 
 // =======================================================
-// 🛒 CART ROUTES (RESTORED)
+// 🛒 CART ROUTES
 // =======================================================
 
 // 1. GET User Cart
@@ -516,7 +527,6 @@ app.post("/api/orders", authMiddleware, async (req, res) => {
 });
 
 // Get my orders
-const BASE_URL = process.env.BASE_URL || "http://localhost:5000";
 app.get("/api/orders/my", authMiddleware, async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.user.id })
@@ -528,6 +538,7 @@ app.get("/api/orders/my", authMiddleware, async (req, res) => {
       items: o.items.map((i) => {
         const src = i.image || i.productId?.image || null;
         let img = src;
+        // Fix for legacy images stored as paths:
         if (img && !img.startsWith("data:") && !img.startsWith("http")) {
           img = `${BASE_URL}${img.startsWith("/") ? "" : "/"}${img}`;
         }
@@ -612,7 +623,7 @@ app.put("/api/orders/:id/status", authMiddleware, async (req, res) => {
 });
 
 // =======================================================
-// 🎸 PRODUCT ROUTES (RESTORED)
+// 🎸 PRODUCT ROUTES
 // =======================================================
 
 app.get("/api/products", async (req, res) => {
@@ -704,10 +715,11 @@ app.delete("/api/products/:id", authMiddleware, async (req, res) => {
 // =======================================================
 // 🚀 SERVER START
 // =======================================================
-app.get(/.*/, (req, res) => {
-  if (!req.path.startsWith("/api") && !req.path.startsWith("/uploads")) {
-    res.sendFile(path.resolve(__dirname, "frontend", "index.html"));
-  }
+
+// Simple route to check if server is alive
+app.get("/", (req, res) => {
+  res.send("Guitar Store API is running...");
 });
 
+// NOTE: Do not host frontend files here anymore. Netlify does that.
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
