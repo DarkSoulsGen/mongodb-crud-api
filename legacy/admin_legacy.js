@@ -1,4 +1,18 @@
+//backend/admin.js
+
+/**
+ * ==============================================================
+ *  LEGACY ADMIN FILE (Archived)
+ *  --------------------------------------------------------------
+ *  This script originated from early tutorials suggesting
+ *  separate front‑ and backend admin controllers.
+ *  The Node backend already handles admin logic inside server.js.
+ *  This file remains for reference only — it is NOT executed.
+ * ==============================================================
+ */
+
 // BASE URLs (Ensure this matches your Render URL)
+//const API_BASE_URL = "http://localhost:5000";
 const API_BASE_URL = "https://mongodb-crud-api-azs9.onrender.com";
 const PRODUCTS_URL = `${API_BASE_URL}/api/products`;
 const USERS_URL = `${API_BASE_URL}/api/users`;
@@ -330,6 +344,7 @@ async function toggleAdminStatus(e) {
 if (checkAdminStatus()) {
     loadProductsForAdmin();
     loadUsers();
+     loadOrders(); // 👈 add this
 }
 
 // Attach Logout Listener

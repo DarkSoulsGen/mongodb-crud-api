@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KnaveTone ⚡ | My Orders</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Poppins:wght@300;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-dark text-light">
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">KnaveTone ⚡</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center" id="navAuthLinks"></ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-3">
+    <button onclick="window.history.back()" class="btn btn-sm btn-outline-info mb-3 d-flex align-items-center">
+      <i class="bi bi-arrow-left me-2"></i> Go Back
+    </button>
+    
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0 text-light">
+        <li class="breadcrumb-item"><a href="index.html" class="text-info">Home</a></li>
+        <li class="breadcrumb-item active text-light" aria-current="page">My Orders</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="container py-5">
+    <h1 class="text-warning mb-4 display-4 font-orbitron">My Orders</h1>
+    <div class="card card-cyber p-3">
+      <div class="table-responsive">
+        <table class="table table-dark table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Placed</th>
+            </tr>
+          </thead>
+          <tbody id="userOrderTable">
+            <tr><td colspan="5" class="text-center">Loading your orders...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- API config for this page -->
+  <script>
+    const API_BASE_URL = "http://localhost:5000";
+    const ORDER_MY_URL = `${API_BASE_URL}/api/orders/my`;
+    const USERS_URL = `${API_BASE_URL}/api/users`;
+    const PROFILE_URL = `${USERS_URL}/profile`;
+  </script>
+
+  <!-- Shared navbar/auth/cart logic -->
+  <script src="index.js"></script>
+
+  <script>
+    function getToken() {
+      return localStorage.getItem("knavetoneToken");
+    }
+
+        async function loadMyOrders() {
+      const token = getToken();
+      const tbody = document.getElementById('userOrderTable');
+
+      if (!token) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-warning">Please log in to see your orders.</td></tr>';
+        return;
+      }
+
+      try {
+        const res = await fetch(ORDER_MY_URL, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const orders = await res.json();
+        if (!orders || orders.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="text-center text-warning">You have no orders yet.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = orders.map(o => {
+          // 🖼️ UPDATE: Render image next to name
+          const itemsSummary = o.items.map(i => {
+            // Use saved image or fallback
+            const imgSrc = i.image || 'https://placehold.co/40x40/1C1C25/00FFFF?text=No+Img';
+            
+            return `
+              <div class="d-flex align-items-center mb-2">
+                <img src="${imgSrc}" alt="${i.name}" 
+                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 10px; border: 1px solid rgba(0,255,255,0.3);">
+                <div>
+                  <div class="text-light">${i.name}</div>
+                  <small class="text-muted">Qty: ${i.quantity}</small>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          const created = new Date(o.createdAt).toLocaleString();
+
+          return `
+            <tr>
+              <td class="align-middle" title="${o._id}">${o._id.slice(0,6)}...</td>
+              <td class="align-middle">${itemsSummary}</td>
+              <td class="align-middle text-info fw-bold">$${o.totalAmount.toFixed(2)}</td>
+              <td class="align-middle"><span class="badge bg-secondary">${o.status}</span></td>
+              <td class="align-middle small">${created}</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error("Error loading my orders:", err);
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Failed to load your orders.</td></tr>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadMyOrders);
+  </script>
+</body>
+</html>

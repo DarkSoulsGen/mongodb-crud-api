@@ -1,6 +1,6 @@
 // product.js
 
-// 🚨 API_BASE_URL and PRODUCTS_URL are now defined globally in index.html/product.html
+// 🚨 API_BASE_URL, PRODUCTS_URL, and CART_URL are now defined globally by index.js/product.html
 
 const productList = document.getElementById("productList");
 const categoryButtons = document.getElementById("categoryButtons");
@@ -11,132 +11,171 @@ const sortDropdownButton = document.getElementById("sortDropdown");
 // Global state for product data
 let allProducts = [];
 let currentSort = 'newest'; // Default sort
+let currentCategory = 'All';
 
-// 🔹 cart helpers (same as before)
-function getCart(){ return JSON.parse(localStorage.getItem("knavetoneCart")) || []; }
-function saveCart(c){ 
-    localStorage.setItem("knavetoneCart", JSON.stringify(c)); 
-    // Use the global function defined in the HTML script for cart count update
-    if(typeof updateCartCount === 'function') updateCartCount(c.length);
-    else if(cartCount) cartCount.textContent = c.length; 
+// 🚨 REMOVED: Old getCart/saveCart local storage functions.
+
+// =======================================================
+// 🛒 NEW ASYNC CART HELPERS (Re-implemented for API access)
+// =======================================================
+
+function getToken() {
+    return localStorage.getItem("knavetoneToken");
 }
 
-function isUserLoggedIn() {
-    return !!localStorage.getItem("knavetoneToken");
-}
-
-function addToCart(p){
-  // ✅ NEW: Authentication Check
-  if (!isUserLoggedIn()) {
+function handleAuthFailure() {
+    // Show login modal for unauthenticated users
     const loginModalEl = document.getElementById('loginModal');
     if (loginModalEl) {
-      // Check if bootstrap is defined before calling the constructor
-      if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-          const loginModal = new bootstrap.Modal(loginModalEl);
-          loginModal.show();
-          showCustomAlert("Please login or register to add items to your cart.", "warning");
-      } else {
-          alert("Please login or register to add items to your cart.");
-      }
+        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+            const loginModal = new bootstrap.Modal(loginModalEl);
+            loginModal.show();
+            showCustomAlert("Please login or register to add items to your cart.", "warning");
+        } else {
+            alert("Please login or register to add items to your cart.");
+        }
     }
-    return;
+}
+
+/**
+ * Fetches the current cart count from the server and updates the UI (if function exists in index.js).
+ */
+function updateCartCountOnSuccess() {
+  // Uses the global function defined in index.js
+  if (typeof window.updateCartCountFromAPI === 'function') {
+    window.updateCartCountFromAPI();
   }
+}
+
+/**
+ * Adds or updates an item in the persistent cart via API.
+ * @param {Object} p - The product object to add. Must include: id, name, stock.
+ */
+async function addToCart(p) {
+  const token = getToken();
+  if (!token) return handleAuthFailure();
+
+  let currentQuantity = 0;
   
-  const c=getCart();
-  
-  // Check for stock before adding
-  const itemInCart = c.find(i => i.id === p.id);
-  if (itemInCart) {
-      if (itemInCart.quantity < p.stock) {
-          itemInCart.quantity += 1;
-          showCustomAlert(`${p.name} quantity increased to ${itemInCart.quantity}.`, "success");
-      } else {
-          return showCustomAlert(`Maximum stock (${p.stock}) reached for ${p.name}.`, "danger");
+  try {
+    const res = await fetch(CART_URL, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (res.ok) {
+      const serverCart = await res.json();
+      const itemInCart = serverCart.find(item => item.productId._id === p.id);
+      if (itemInCart) {
+        currentQuantity = itemInCart.quantity;
       }
-  } else {
-      if (p.stock > 0) {
-          c.push({...p, quantity: 1}); // Start with quantity 1
-          showCustomAlert(`${p.name} added to your cart!`, "success");
-      } else {
-          return showCustomAlert(`${p.name} is out of stock.`, "danger");
-      }
+    } else if (res.status === 401 || res.status === 403) {
+      return handleAuthFailure();
+    }
+  } catch (error) {
+    console.error("Error checking cart state:", error);
+    return showCustomAlert('Failed to connect to cart service.', 'danger');
   }
 
-  saveCart(c);
+  const newQuantity = currentQuantity + 1;
+  const maxStock = p.stock;
+
+  if (newQuantity > maxStock) {
+    return showCustomAlert(`Maximum stock (${maxStock}) reached for ${p.name}.`, "danger");
+  }
+
+  try {
+    const res = await fetch(CART_URL, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ productId: p.id, quantity: newQuantity })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+  // 1) Update cart badge (sum of quantities)
+  updateCartCountOnSuccess();
+
+  // 2) Trigger fly-to-cart animation with new total quantity
+  if (typeof window.animateAddToCart === 'function') {
+    window.animateAddToCart(p.id, newQuantity);
+  }
+  console.log("Add to cart success, animating for product:", p.id, "newQuantity:", newQuantity);
+
+  // 3) Refresh products to update stock display
+  await refreshProductsFromServer();
+} else if (res.status === 401 || res.status === 403) {
+      handleAuthFailure();
+    } else {
+      showCustomAlert(data.message || "Failed to add item to cart.", 'danger');
+    }
+  } catch (error) {
+    console.error("Error sending cart update:", error);
+    showCustomAlert('Network error while adding item to cart.', 'danger');
+  }
 }
 
 // Reuse the custom alert from product.html's inline script
 function showCustomAlert(message, type) {
     // Use the global alias if available
-    if (typeof window.showCustomAlert === 'function') {
-        window.showCustomAlert(message, type);
+    if (typeof window.showAlert === 'function') { 
+        window.showAlert(message, type);
         return;
     }
     // Fallback if showAlert is not available
     alert(`[${type.toUpperCase()}] ${message}`);
 }
 
+
 // =======================================================
-// ⬇️ LOAD AND RENDER PRODUCTS
+// ⬇️ LOAD AND RENDER PRODUCTS (No change)
 // =======================================================
 
 function renderProducts(products) {
-    if (!productList) return;
+  if (!productList) return;
 
-    if (products.length === 0) {
-        productList.innerHTML = '<div class="col-12 text-center text-warning p-5">No products found in this category.</div>';
-        return;
-    }
+  if (products.length === 0) {
+    productList.innerHTML = '<div class="col-12 text-center text-warning p-5">No products found in this category.</div>';
+    return;
+  }
 
-    productList.innerHTML = products.map(p => {
-        const imageUrl = p.image || 'https://placehold.co/400x200/1C1C25/00FFFF?text=No+Image';
-        const displayDescription = p.description ? p.description.substring(0, 100) + (p.description.length > 100 ? '...' : '') : 'No description available.';
-        const displayId = p._id ? p._id.substring(0, 8) : 'N/A';
-        const isOutOfStock = p.stock <= 0;
+  productList.innerHTML = products.map(p => {
+    const imageUrl = p.image || 'https://placehold.co/400x200/1C1C25/00FFFF?text=No+Image';
+    const displayDescription = p.description
+      ? p.description.substring(0, 100) + (p.description.length > 100 ? '...' : '')
+      : 'No description available.';
+    const isOutOfStock = p.stock <= 0;
 
-        return `
-            <div class="col">
-                <div class="card card-cyber h-100">
-                    <img src="${imageUrl}" class="card-img-top" alt="${p.name}" loading="lazy">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title text-warning">${p.name}</h5>
-                        <p class="card-text text-muted">${displayDescription}</p>
-                        <p class="mt-auto fw-bold text-info fs-4">$${p.price.toFixed(2)}</p>
-                        <button class="btn btn-warning btn-sm fw-bold mt-2 add-to-cart-btn" 
-                                data-id="${p._id}" 
-                                data-name="${p.name}" 
-                                data-price="${p.price}" 
-                                data-image="${p.image}"
-                                data-stock="${p.stock}"
-                                ${isOutOfStock ? 'disabled' : ''}>
-                            ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
-                        </button>
-                    </div>
-                    <div class="card-footer bg-transparent border-0 d-flex justify-content-between">
-                         <small class="text-muted">ID: ${displayId}</small>
-                         <small class="text-info">${p.type}</small>
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
+    const stockLabel = isOutOfStock
+      ? '<span class="badge bg-danger-cyber text-dark">Out of Stock</span>'
+      : `<span class="badge bg-success-cyber text-dark">In Stock: ${p.stock}</span>`;
 
-    // Re-attach cart event listeners
-    productList.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        if (!button.disabled) {
-            button.addEventListener('click', (e) => {
-                const p = e.currentTarget.dataset;
-                addToCart({
-                    id: p.id,
-                    name: p.name,
-                    price: parseFloat(p.price),
-                    image: p.image,
-                    quantity: 1, // Quantity will be managed by the addToCart logic
-                    stock: parseInt(p.stock)
-                });
-            });
-        }
-    });
+    return `
+      <div class="col-6 col-sm-4 col-md-4 col-lg-3 mb-4">
+        <div class="card card-cyber h-100">
+          <img src="${imageUrl}" class="card-img-top" alt="${p.name}" loading="lazy">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-warning">${p.name}</h5>
+            <p class="card-text text-muted">${displayDescription}</p>
+            <p class="mb-1">${stockLabel}</p>
+            <p class="mt-auto fw-bold text-info fs-4">$${p.price.toFixed(2)}</p>
+            <button class="btn btn-warning btn-sm fw-bold mt-2 add-to-cart-btn"
+              data-id="${p._id}"
+              data-name="${p.name}"
+              data-price="${p.price}"
+              data-image="${p.image}"
+              data-stock="${p.stock}"
+              ${isOutOfStock ? 'disabled' : ''}>
+              ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 function renderCategoryButtons(products) {
@@ -173,26 +212,22 @@ function sortProducts(products) {
             return products.sort((a, b) => a.name.localeCompare(b.name));
         case 'newest':
         default:
-            // Assuming the API returns products ordered by creation date (or use a dedicated 'createdAt' field if available)
-            // For now, we'll assume the default array order is by creation or ID.
-            return products.reverse(); // Simple way to simulate reverse order if API returns by ID
+            return products.reverse(); 
     }
 }
 
 
 function displayProducts(category) {
-    let filteredProducts = allProducts;
-    
-    // 1. Filter
-    if (category !== 'All') {
-        filteredProducts = allProducts.filter(p => p.type === category);
-    }
-    
-    // 2. Sort
-    const sortedProducts = sortProducts([...filteredProducts]);
-    
-    // 3. Render
-    renderProducts(sortedProducts);
+  currentCategory = category;  // remember last category
+
+  let filteredProducts = allProducts;
+  
+  if (category !== 'All') {
+    filteredProducts = allProducts.filter(p => p.type === category);
+  }
+  
+  const sortedProducts = sortProducts([...filteredProducts]);
+  renderProducts(sortedProducts);
 }
 
 /**
@@ -201,9 +236,6 @@ function displayProducts(category) {
 async function loadAllProducts() {
     if (!productList) return;
     
-    // Initial cart count update
-    saveCart(getCart());
-
     productList.innerHTML = '<div class="col-12 text-center text-muted p-5">Loading catalog...</div>';
     
     try {
@@ -229,7 +261,7 @@ async function loadAllProducts() {
 }
 
 // =======================================================
-// 🎚️ SORTING EVENT LISTENER (Existing code)
+// 🎚️ SORTING EVENT LISTENER (No change)
 // =======================================================
 if (document.querySelector('.dropdown-menu-dark')) {
     document.querySelector('.dropdown-menu-dark').addEventListener('click', function(e) {
@@ -240,14 +272,61 @@ if (document.querySelector('.dropdown-menu-dark')) {
         currentSort = sortType;
         
         // Update button text
-        const sortText = e.target.textContent;
-        sortDropdownButton.textContent = `Sort By: ${sortText}`;
+        sortDropdownButton.textContent = `Sort By: ${e.target.textContent}`;
         
         // Get the category of the currently active button to re-filter/re-display
         const activeCategory = document.querySelector('.btn-cyber-cat.active').dataset.category;
         displayProducts(activeCategory);
       }
     });
+}
+
+// =======================================================
+// 🖱️ FIX: EVENT DELEGATION FOR ADD TO CART
+// =======================================================
+if (productList) {
+    productList.addEventListener('click', function(e) {
+        // Use closest() to find the button, even if an icon or span inside was clicked
+        const btn = e.target.closest('.add-to-cart-btn');
+        
+        if (btn && !btn.disabled) {
+            e.preventDefault();
+            const p = btn.dataset;
+            
+            // Call the addToCart function using the data attributes
+            addToCart({
+                id: p.id,
+                name: p.name,
+                price: parseFloat(p.price),
+                image: p.image,
+                quantity: 1, 
+                stock: parseInt(p.stock)
+            });
+        }
+    });
+}
+
+// Re-fetch products from server and redisplay current category/sort
+async function refreshProductsFromServer() {
+  try {
+    const res = await fetch(PRODUCTS_URL);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    const products = await res.json();
+    allProducts = products;
+
+    // If category buttons already exist, just redisplay with current filters
+    if (categoryButtons && categoryButtons.children.length > 0) {
+      displayProducts(currentCategory);
+    } else {
+      // If first load somehow, build category buttons
+      renderCategoryButtons(allProducts);
+      displayProducts('All');
+    }
+  } catch (err) {
+    console.error("Error refreshing products from server:", err);
+  }
 }
 
 // =======================================================

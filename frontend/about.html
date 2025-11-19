@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KnaveTone ⚡ | About Us</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Poppins:wght@300;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ===== About page specific styling ===== */
+
+    .about-hero {
+      background: linear-gradient(135deg, #0c0c14, #111118, #151821);
+      border-bottom: 1px solid rgba(0,255,255,0.25);
+      box-shadow: 0 10px 30px rgba(0,255,255,0.1);
+      padding: 3rem 0 2.5rem;
+    }
+
+    .about-hero-title {
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 1.6px;
+      text-shadow: 0 0 14px rgba(0,255,255,0.8);
+    }
+
+    .about-tagline {
+      color: #ffcc00;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .about-body {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .about-blurb {
+      color: #b0b0b0;
+      font-size: 0.98rem;
+    }
+
+    .about-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0,255,255,0.4);
+      background: rgba(0,255,255,0.06);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #00ffff;
+    }
+
+    .about-pill i {
+      font-size: 0.95rem;
+    }
+
+    .about-feature-card {
+      background: #111118;
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      border: 1px solid rgba(0,255,255,0.25);
+      box-shadow: 0 0 18px rgba(0,255,255,0.08);
+      height: 100%;
+    }
+
+    .about-feature-card h5 {
+      color: #ffcc00;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.05rem;
+    }
+
+    .about-feature-card p {
+      font-size: 0.95rem;
+      color: #c0c0c0;
+    }
+
+    .about-highlight {
+      border-left: 3px solid #00ffff;
+      padding-left: 1rem;
+      margin-top: 1.2rem;
+    }
+
+    .about-highlight strong {
+      color: #00ffff;
+    }
+
+    .about-team-card {
+      background: #10131d;
+      border-radius: 12px;
+      border: 1px dashed rgba(0,255,255,0.25);
+      padding: 1.5rem;
+    }
+
+    .about-team-card p {
+      font-size: 0.95rem;
+      color: #b5b5b5;
+    }
+
+    .avatar-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(0,255,255,0.09);
+      border: 1px solid rgba(0,255,255,0.3);
+      font-size: 0.8rem;
+      color: #e0e0e0;
+    }
+
+    .avatar-chip img {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #00ffff;
+    }
+  </style>
+</head>
+<body class="bg-dark text-light">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">KnaveTone ⚡</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link active" href="about.html">About Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
+        </ul>
+        <ul class="navbar-nav ms-auto align-items-center" id="navAuthLinks"></ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="container py-3">
+    <button onclick="window.history.back()" class="btn btn-sm btn-outline-info mb-3 d-flex align-items-center">
+      <i class="bi bi-arrow-left me-2"></i> Go Back
+    </button>
+    
+    <nav aria-label="breadcrumb" class="bg-dark">
+      <ol id="breadcrumb"></ol>
+    </nav>
+  </div>
+
+  <!-- HERO -->
+  <section class="about-hero">
+    <div class="container about-body">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+          <span class="about-pill mb-2">
+            <i class="bi bi-lightning-charge-fill"></i>
+            Boutique Cyber Tonecraft
+          </span>
+          <h1 class="about-hero-title display-5 text-info mb-2">We Build Instruments for the Neon Age</h1>
+          <p class="about-blurb mb-0">
+            KnaveTone started as a late‑night obsession in a tiny workshop — chasing the perfect blend
+            of <span class="text-warning">analog soul</span> and <span class="text-info">digital precision</span>.
+            Today, we hand‑select every piece of wood, every pickup, and every line of code that powers our
+            cyber‑enhanced guitars, basses, and rigs.
+          </p>
+        </div>
+        <div class="col-lg-5">
+          <div class="about-highlight">
+            <p class="mb-1">
+              <strong>Our mission:</strong> craft instruments that
+              feel like classics but respond like next‑gen machines.
+            </p>
+            <p class="mb-0 about-blurb">
+              From underground gigs to studio sessions, KnaveTone rigs are tuned for players
+              who want <span class="text-info">clarity</span>, <span class="text-warning">attitude</span>, and
+              <span class="text-info">reliability</span> in any signal chain.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <section class="container py-5 about-body">
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <h3 class="text-warning mb-3">From Basement Lab to Boutique Brand</h3>
+        <p class="about-blurb">
+          What started as a single custom build for a friend quickly spiraled into a full‑time craft.
+          We noticed modern players wanted more than off‑the‑shelf instruments — they wanted pieces
+          that felt <strong>personal</strong>, looked <strong>futuristic</strong>, and still sounded
+          like the records they grew up on.
+        </p>
+        <p class="about-blurb">
+          Every KnaveTone instrument is set up, tested, and play‑checked by real musicians before it
+          ever hits the store. No dusty warehouse stock. No “good enough.” Only gear we’d be proud
+          to take on stage ourselves.
+        </p>
+      </div>
+
+      <div class="col-lg-6">
+        <h3 class="text-warning mb-3">Why Players Choose KnaveTone ⚡</h3>
+        <div class="row g-3">
+          <div class="col-sm-12">
+            <div class="about-feature-card">
+              <h5><i class="bi bi-magic me-2 text-info"></i> Boutique Builds</h5>
+              <p>
+                Hand‑selected woods, custom wiring options, and tight setups out of the box.
+                We obsess over the details so you can obsess over tone.
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="about-feature-card">
+              <h5><i class="bi bi-cpu-fill me-2 text-info"></i> Cyber‑Ready Gear</h5>
+              <p>
+                Our rigs are designed to live comfortably between tube amps, modelers, and fully
+                digital stages. No matter the chain, your tone cuts through.
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="about-feature-card">
+              <h5><i class="bi bi-headset me-2 text-info"></i> Player‑First Support</h5>
+              <p>
+                Need help dialing in a sound or configuring your setup? Our support crew are
+                players too — we speak your language, not just serial numbers.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team / Community block -->
+    <div class="row g-4 mt-4">
+      <div class="col-12">
+        <div class="about-team-card">
+          <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+              <h4 class="text-info mb-2">Meet the KnaveTone Crew</h4>
+              <p class="mb-2">
+                We’re a tiny team of builders, techs, and players bound together by late‑night sessions,
+                too much coffee, and an unhealthy love for overdrive.
+              </p>
+              <p class="mb-0">
+                Whether you’re grabbing your first serious instrument or speccing your twelfth custom
+                build, we’re here to help you find the gear that feels like an extension of you.
+              </p>
+            </div>
+            <div class="text-end">
+              <div class="avatar-chip">
+                <img src="/uploads/default.png" alt="Founder">
+                <span>Genesis — Builder / Designer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="text-center py-3 mt-4">
+    <p class="text-muted small mb-0">&copy; 2025 KnaveTone ⚡ Boutique Guitars. All rights reserved.</p>
+  </footer>
+
+  <!-- Login Modal (reused from index.html so navbar Login works) -->
+  <div class="modal fade" id="loginModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">System Access: Login</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="loginForm">
+            <div class="mb-3">
+              <label for="loginEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="loginEmail" required>
+            </div>
+            <div class="mb-3">
+              <label for="loginPassword" class="form-label">Password</label>
+              <input type="password" class="form-control" id="loginPassword" required>
+            </div>
+            <button type="submit" class="btn btn-warning w-100">Access System</button>
+          </form>
+          <p class="text-center mt-3 small">
+            Don't have an account? <a href="register.html" class="text-info">Register here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast (optional, for login feedback) -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+    <div id="loginToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div id="loginToastBody" class="toast-body"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Global constants (same pattern as other pages) -->
+  <script>
+    window.API_BASE_URL = "http://localhost:5000";
+    const USERS_URL = `${API_BASE_URL}/api/users`;
+    const PROFILE_URL = `${USERS_URL}/profile`;
+    const PRODUCTS_URL = `${API_BASE_URL}/api/products`;
+    const CART_URL = `${API_BASE_URL}/api/cart`;
+    const DEFAULT_PROFILE_PIC = "/uploads/default.png";
+  </script>
+
+  <!-- Shared navbar/auth/cart logic -->
+  <script src="index.js"></script>
+
+  <!-- Breadcrumb config + helper -->
+  <script>
+    window.BREADCRUMB = [
+      { label: 'Home', href: 'index.html' },
+      { label: 'About Us', href: null }
+    ];
+  </script>
+  <script src="breadcrumb.js"></script>
+
+  <!-- Simple login toast & handler (optional) -->
+  <script>
+    function showToast(message, delay = 2000) {
+      const toastEl = document.getElementById("loginToast");
+      const toastBody = document.getElementById("loginToastBody");
+      if (!toastEl || !toastBody) return;
+      toastBody.textContent = message;
+      const toast = new bootstrap.Toast(toastEl, { delay });
+      toast.show();
+    }
+
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+
+        try {
+          const res = await fetch(`${USERS_URL}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await res.json();
+
+          if (res.ok) {
+            showToast("✅ Login successful! Redirecting...");
+            localStorage.setItem("knavetoneToken", data.token);
+            localStorage.setItem("knavetoneIsAdmin", data.isAdmin);
+            localStorage.setItem("knavetoneUserName", data.firstName);
+            if (data.profilePicture) {
+              localStorage.setItem("knavetoneProfilePic", data.profilePicture);
+            } else {
+              localStorage.removeItem("knavetoneProfilePic");
+            }
+            setTimeout(() => window.location.reload(), 1200);
+          } else {
+            showToast("❌ " + (data.message || "Login failed."));
+          }
+        } catch (err) {
+          console.error(err);
+          showToast("⚠️ Error connecting to server.");
+        }
+      });
+    }
+  </script>
+</body>
+</html>

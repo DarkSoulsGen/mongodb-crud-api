@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KnaveTone ⚡ | Products</title>
 
-  <link rel="icon" href="favicon.ico" type="image/x-icon"> 
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Poppins:wght@300;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="text-light">
+<body class="bg-dark text-light">
 
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
@@ -22,147 +22,216 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
-          <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="product.html">Products</a></li>
-        </ul>
-        <ul class="navbar-nav ms-auto align-items-center" id="navAuthLinks">
-            </ul>
+        <!-- Auth links will be dynamically populated by index.js -->
+        <ul class="navbar-nav ms-auto align-items-center" id="navAuthLinks"></ul>
       </div>
     </div>
   </nav>
 
-  <div class="container mt-4">
-    <div class="row align-items-center mb-3">
-        <div class="col-6">
-            <h1 class="text-warning font-monospace">All Products</h1>
-        </div>
-        <div class="col-6 d-flex justify-content-end">
-            <div class="dropdown me-2">
-                <button class="btn btn-outline-info dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    Sort By: Newest
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item" href="#" data-sort="newest">Newest</a></li>
-                    <li><a class="dropdown-item" href="#" data-sort="priceAsc">Price (Low to High)</a></li>
-                    <li><a class="dropdown-item" href="#" data-sort="priceDesc">Price (High to Low)</a></li>
-                    <li><a class="dropdown-item" href="#" data-sort="nameAsc">Name (A-Z)</a></li>
-                </ul>
-            </div>
-        </div>
+  <!-- Breadcrumbs -->
+  <nav aria-label="breadcrumb" class="bg-dark pt-3 pb-1 border-bottom border-secondary border-opacity-25">
+    <div class="container">
+      <ol id="breadcrumb"></ol>
+    </div>
+  </nav>
+
+  <section class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+      <h1 class="text-warning mb-3 mb-md-0">All Products</h1>
+      
+      <!-- Sorting Dropdown -->
+      <div class="dropdown">
+        <button class="btn btn-cyber-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Sort By: Newest
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="sortDropdown">
+          <li><a class="dropdown-item" href="#" data-sort="newest">Newest</a></li>
+          <li><a class="dropdown-item" href="#" data-sort="priceAsc">Price (Low to High)</a></li>
+          <li><a class="dropdown-item" href="#" data-sort="priceDesc">Price (High to Low)</a></li>
+          <li><a class="dropdown-item" href="#" data-sort="nameAsc">Name (A-Z)</a></li>
+        </ul>
+      </div>
     </div>
 
-    <div class="mb-4 d-flex flex-wrap gap-2" id="categoryButtons">
-        <button class="btn btn-cyber-cat active" data-category="All">All</button>
+    <!-- Category Buttons -->
+    <div id="categoryButtons" class="d-flex flex-wrap gap-2 mb-4">
+      <!-- Buttons populated by product.js -->
     </div>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5" id="productList">
-        <div class="col-12 text-center text-info p-5">Loading products...</div>
+    <!-- Product Grid -->
+    <div class="row" id="productList">
+      <div class="col-12 text-center text-info p-5">Loading products...</div>
     </div>
-  </div>
+  </section>
 
-
-  <div class="modal fade" id="loginModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+  <!-- Login Modal (reusable) -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="loginModalLabel">System Access: Login</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <h5 class="modal-title" id="loginModalLabel">Login to KnaveTone ⚡</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="loginForm">
+          <form id="loginFormModal">
             <div class="mb-3">
-              <label for="loginEmail" class="form-label">Email</label>
+              <label for="loginEmail" class="form-label">Email address</label>
               <input type="email" class="form-control" id="loginEmail" required>
             </div>
             <div class="mb-3">
               <label for="loginPassword" class="form-label">Password</label>
               <input type="password" class="form-control" id="loginPassword" required>
             </div>
-            <button type="submit" class="btn btn-warning w-100">Access System</button>
+            <p class="text-secondary text-center">
+              <a href="register.html" class="text-info">Don't have an account? Register here.</a>
+            </p>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-cyber-primary">Login</button>
+            </div>
           </form>
-          <p class="text-center mt-3 small">
-            Don't have an account? <a href="register.html" class="text-info">Register here</a>
-          </p>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="customAlertModal" tabindex="-1">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="customAlertTitle">Alert</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p id="customAlertBody"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
+  <!-- Custom Alert Modal -->
+  <div class="modal fade" id="customAlertModal" tabindex="-1" aria-labelledby="customAlertModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h5 class="modal-title" id="customAlertTitle">Alert</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          <p id="customAlertBody"></p>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-cyber-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Toast Container -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+    <div id="loginToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body text-info" id="toastBody"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
     </div>
   </div>
 
-
-  <footer class="text-center py-3 mt-5">
-    <p class="text-muted small">&copy; 2025 KnaveTone ⚡ Boutique Guitars. All rights reserved.</p>
-  </footer>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
   <script>
     // Global Constants and Utility Functions
-    //window.API_BASE_URL = "http://localhost:5000";
-    window.API_BASE_URL = "https://mongodb-crud-api-azs9.onrender.com";
+    const API_BASE_URL = "http://localhost:5000";
     const PRODUCTS_URL = `${API_BASE_URL}/api/products`;
     const USERS_URL = `${API_BASE_URL}/api/users`;
     const PROFILE_URL = `${USERS_URL}/profile`;
     const LOGIN_URL = `${USERS_URL}/login`;
+    const REGISTER_URL = `${USERS_URL}`;
+    const DEFAULT_PROFILE_PIC = "https://placehold.co/40x40/1C1C25/00FFFF?text=P";
 
-    window.DEFAULT_PROFILE_PIC = "/uploads/default.png";
-
-    // Global utility for showing custom alerts
-    const customAlertModal = new bootstrap.Modal(document.getElementById('customAlertModal'));
-    window.showAlert = function(message, type) {
-        const titleEl = document.getElementById('customAlertTitle');
-        const bodyEl = document.getElementById('customAlertBody');
-        
-        // Reset and set content
-        titleEl.textContent = type === 'success' ? 'Success' : type === 'danger' ? 'Error' : 'Alert';
-        titleEl.classList.remove('text-info', 'text-warning', 'text-danger');
-        titleEl.classList.add(type === 'success' ? 'text-warning' : type === 'danger' ? 'text-danger' : 'text-info');
-        
-        bodyEl.textContent = message;
-        
-        customAlertModal.show();
+    // Toast
+    window.showToast = function(message) {
+      const toastEl = document.getElementById('loginToast');
+      const toastBodyEl = document.getElementById('toastBody');
+      if (toastEl && toastBodyEl && typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+        toastBodyEl.textContent = message;
+        const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+        toast.show();
+      } else {
+        console.warn("Toast not available:", message);
+      }
     }
 
-    /**
-     * Reusable function to update the cart count in the navbar (used by product.js)
-     * @param {number} count - The number of items in the cart.
-     */
+    // Alert modal
+    const customAlertModalEl = document.getElementById('customAlertModal');
+    let customAlertModal;
+    if (typeof bootstrap !== 'undefined' && customAlertModalEl) {
+      customAlertModal = new bootstrap.Modal(customAlertModalEl);
+    }
+
+    window.showAlert = function(message, type = 'info') {
+      if (!customAlertModal) {
+        alert(`${type.toUpperCase()}: ${message}`);
+        return;
+      }
+
+      const titleEl = document.getElementById('customAlertTitle');
+      const bodyEl = document.getElementById('customAlertBody');
+      
+      titleEl.textContent = type === 'success' ? 'Success' : type === 'danger' ? 'Error' : 'Alert';
+      titleEl.classList.remove('text-info', 'text-warning', 'text-danger');
+      titleEl.classList.add(type === 'success' ? 'text-warning' : type === 'danger' ? 'text-danger' : 'text-info');
+      
+      bodyEl.textContent = message;
+      customAlertModal.show();
+    }
+
     window.updateCartCount = function(count) {
-        const cartCountNav = document.getElementById('cartCountNav');
-        if (cartCountNav) {
-            const newCount = parseInt(count) || 0;
-            cartCountNav.textContent = newCount;
-            if (newCount > 0) {
-                cartCountNav.classList.remove('d-none');
-            } else {
-                cartCountNav.classList.add('d-none');
-            }
-        }
+      const cartCountNav = document.getElementById("cartCountNav");
+      if (cartCountNav) {
+        const newCount = parseInt(count) || 0; 
+        cartCountNav.textContent = newCount;
+        cartCountNav.classList.toggle('d-none', newCount <= 0);
+      }
+    }
+
+    // Fly-to-cart animation (unchanged)
+    window.animateAddToCart = function(productId, newQuantity) {
+      try {
+        const btn = document.querySelector(`.add-to-cart-btn[data-id="${productId}"]`);
+        const cartIcon = document.querySelector('.bi-cart-fill') || document.querySelector('.bi-cart');
+        if (!btn || !cartIcon) return;
+
+        const btnRect  = btn.getBoundingClientRect();
+        const cartRect = cartIcon.getBoundingClientRect();
+
+        const startX = btnRect.left + btnRect.width  / 2;
+        const startY = btnRect.top  + btnRect.height / 2;
+        const endX   = cartRect.left + cartRect.width  / 2;
+        const endY   = cartRect.top  + cartRect.height / 2;
+
+        const badge = document.createElement('div');
+        badge.className = 'cart-fly-badge';
+        badge.textContent = (typeof newQuantity === 'number') ? `x${newQuantity}` : '+1';
+
+        badge.style.left = startX + 'px';
+        badge.style.top  = startY + 'px';
+        badge.style.transform = 'translate(0, 0)';
+        badge.style.opacity = '1';
+
+        document.body.appendChild(badge);
+
+        requestAnimationFrame(() => {
+          const dx = endX - startX;
+          const dy = endY - startY - 50;
+          badge.style.transform = `translate(${dx}px, ${dy}px)`;
+          badge.style.opacity = '0';
+        });
+
+        setTimeout(() => {
+          if (badge && badge.parentNode) badge.parentNode.removeChild(badge);
+          const ci = document.querySelector('.bi-cart-fill') || document.querySelector('.bi-cart');
+          if (ci) {
+            ci.classList.add('cart-bounce');
+            setTimeout(() => ci.classList.remove('cart-bounce'), 400);
+          }
+        }, 900);
+      } catch (e) {
+        console.warn('animateAddToCart failed:', e);
+      }
     };
-    
+
+    // Modal login form handler
     document.addEventListener("DOMContentLoaded", () => {
-      // Login Form Submission Handler (Duplicated from index.html)
-      const loginForm = document.getElementById("loginForm");
-      if (loginForm) {
-        loginForm.addEventListener("submit", async (e) => {
+      const loginFormModal = document.getElementById("loginFormModal");
+      if (loginFormModal) {
+        loginFormModal.addEventListener("submit", async (e) => {
           e.preventDefault();
           const email = document.getElementById("loginEmail").value;
           const password = document.getElementById("loginPassword").value;
@@ -197,14 +266,22 @@
           }
         });
       }
-      // Initial cart count load
-      const cart = JSON.parse(localStorage.getItem("knavetoneCart")) || [];
-      window.updateCartCount(cart.length);
     });
-
   </script>
 
+  <!-- Shared navbar/auth/cart logic -->
   <script src="index.js"></script>
+
+  <!-- Breadcrumb config + helper -->
+  <script>
+    window.BREADCRUMB = [
+      { label: 'Home', href: 'index.html' },
+      { label: 'Products', href: null }
+    ];
+  </script>
+  <script src="breadcrumb.js"></script>
+
+  <!-- Product page logic -->
   <script src="product.js"></script>
 </body>
 </html>

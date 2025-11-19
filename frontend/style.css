@@ -177,34 +177,34 @@ footer span {
 
 
 /* =======================================================
-   🧑 USER PROFILE NAVIGATION (NEW)
+   🧑 USER PROFILE NAVIGATION
    ======================================================= */
 
 /* Profile Picture container and image style */
 .profile-dropdown-toggle {
   padding: 0;
-  border: 2px solid transparent; /* Placeholder for hover effect */
+  border: 2px solid transparent; 
   background: none;
   border-radius: 50%;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .profile-dropdown-toggle:hover {
-  border-color: #00ffff; /* Cyber glow border on hover */
+  border-color: #00ffff; 
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
 .profile-img {
-  width: 40px; /* Size of the profile image */
+  width: 40px; 
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #111118; /* Inner border to separate from dropdown toggle border */
+  border: 2px solid #111118; 
 }
 
 /* Custom dark dropdown menu */
 .dropdown-menu-cyber {
-  background-color: #111118; /* Dark background similar to navbar */
+  background-color: #111118; 
   border: 1px solid rgba(0, 255, 255, 0.2);
   box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
 }
@@ -215,7 +215,7 @@ footer span {
 
 .dropdown-menu-cyber .dropdown-item:hover,
 .dropdown-menu-cyber .dropdown-item:focus {
-  background-color: #1a1a25; /* Slightly lighter dark background on hover */
+  background-color: #1a1a25; 
   color: #00ffff;
 }
 
@@ -224,51 +224,48 @@ footer span {
 }
 
 /* =======================================================
-   ✅ FIX FOR AUTOFILL ICONS (Existing)
-   ======================================================= */
-/* Hides the eye/reveal button often injected by Chrome/Edge/Firefox */
-input::-ms-reveal,
-input::-ms-clear {
-  display: none !important;
-}
-
-/* Hides native autofill/password manager icons in WebKit browsers (Chrome, Safari, Edge) */
-input[type="password"]::-webkit-contacts-auto-fill-button,
-input[type="password"]::-webkit-credentials-auto-fill-button {
-  visibility: hidden;
-  pointer-events: none; /* Prevents interaction */
-  position: absolute; /* Ensures no layout shift */
-  right: 0;
-}
-
-/* =======================================================
-   🧭 CUSTOM BREADCRUMB (Home / Products)
+   🧭 CUSTOM BREADCRUMB (FIXED)
    ======================================================= */
 nav[aria-label="breadcrumb"] {
-  background-color: #141420;
-  border-bottom: 1px solid rgba(0,255,255,0.2);
-  box-shadow: 0 2px 10px rgba(0,255,255,0.05);
+    background-color: #141420;
+    border-bottom: 1px solid rgba(0,255,255,0.2);
+    box-shadow: 0 2px 10px rgba(0,255,255,0.05);
 }
 
 .breadcrumb {
-  background-color: transparent;
-  margin-bottom: 0;
-  padding: 0.5rem 0;
+    /* Set custom divider for a cleaner look */
+    --bs-breadcrumb-divider: '»'; 
+    background-color: transparent;
+    margin-bottom: 0;
+    padding: 0.5rem 0;
+}
+
+.breadcrumb-item {
+    font-size: 0.95rem;
 }
 
 .breadcrumb-item a {
-  color: #00ffff;
-  text-decoration: none;
-  font-family: 'Orbitron', sans-serif;
-  letter-spacing: 0.5px;
+    color: #00ffff;
+    text-decoration: none;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+    transition: color 0.2s, text-shadow 0.2s;
+}
+
+.breadcrumb-item a:hover {
+    color: #ffcc00;
+    text-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
 }
 
 .breadcrumb-item.active {
-  color: #ccc;
+    color: #e0e0e0;
+    font-weight: 600;
 }
 
+
 /* =======================================================
-   🕶️  Dark Cyberpunk Modals (override Bootstrap defaults)
+   🕶️ Dark Cyberpunk Modals (override Bootstrap defaults)
    ======================================================= */
 .modal-content {
   background-color: #111118 !important;
@@ -305,15 +302,20 @@ nav[aria-label="breadcrumb"] {
 }
 
 .btn-close.btn-close-white {
-  filter: invert(1) brightness(200%);
+  /* Makes the default dark close button visible on a dark background */
+  filter: invert(1) brightness(200%); 
 }
 
-/* 1. Lighter, more readable grey for low-contrast text on dark backgrounds */
+/* =======================================================
+   ℹ️ UTILITY AND MISCELLANEOUS STYLES
+   ======================================================= */
+
+/* Lighter, more readable grey for low-contrast text on dark backgrounds */
 .text-light-muted {
-    color: #b0b0b0 !important; /* A more visible grey */
+    color: #b0b0b0 !important; 
 }
 
-/* 2. Cart Item Image styles (Moved from inline <style> in cart.html) */
+/* Cart Item Image styles */
 .cart-item-img {
     width: 100px; 
     height: 100px;
@@ -328,4 +330,89 @@ nav[aria-label="breadcrumb"] {
   box-shadow: 0 0 12px rgba(0,255,255,0.5);
   font-family: 'Poppins', sans-serif;
   color: #00ffff !important;
+}
+
+/* FIX FOR AUTOFILL ICONS */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none !important;
+}
+
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
+/* =======================================================
+   💅 PRODUCT CARD LAYOUT FIXES
+   ======================================================= */
+
+/* Force card images to have a consistent height and fill */
+.card-img-top {
+    height: 180px; /* Adjust as needed */
+    object-fit: cover;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+/* Ensure the product list container has the correct Bootstrap class */
+#productList {
+    display: flex; /* Ensure the list uses flex behavior */
+    flex-wrap: wrap; /* Allow wrapping */
+}
+
+/* ⭐ GSAP add-to-cart animation badge */
+.cart-fly-badge {
+  position: fixed;
+  z-index: 9999;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  padding: 4px 8px;
+  color: #0a0a0f;
+  background: #00ffff;
+  border-radius: 999px;
+  box-shadow: 0 0 10px #00ffff;
+  pointer-events: none;
+  opacity: 1;
+  transform: translate(0, 0);
+  transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+
+@keyframes cart-bounce {
+  0%   { transform: scale(1);   }
+  30%  { transform: scale(1.3); }
+  60%  { transform: scale(0.9); }
+  100% { transform: scale(1);   }
+}
+.cart-bounce {
+  animation: cart-bounce 0.4s ease-out;
+}
+
+.bg-success-cyber { background-color: #00ff9d !important; }
+.bg-danger-cyber  { background-color: #ff4b5c !important; }
+
+.text-muted {
+  color: #00ffff !important;
+  text-shadow: 0 0 5px rgba(0,255,255,0.4);
+}
+
+.text-secondary {
+  color: #9fdfff !important;                 /* pale cyan‑gray */
+  text-shadow: 0 0 6px rgba(0,255,255,0.3);  /* soft glow */
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+  background-color: #1a1a25 !important;  /* your normal input color */
+  color: #ccc !important;                /* readable text */
+  opacity: 1;                            /* stop Bootstrap from faint-dimming it */
+  border-color: rgba(0,255,255,0.2) !important;
+  box-shadow: none !important;
+}
+
+.admin-thumb {
+  border: 1px solid rgba(0,255,255,0.4);
+  box-shadow: 0 0 5px rgba(0,255,255,0.2);
 }
